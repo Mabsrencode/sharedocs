@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,6 +11,16 @@
     background: #09111f;
     color: #fff;
     margin: 0;
+  }
+  body {
+    font-family: "Roboto", serif !important;
+  }
+  span {
+    line-height: 1;
+  }
+  p,
+  a {
+    color: var(--low-opacity);
   }
 
   .custom-scrollbar::-webkit-scrollbar {
