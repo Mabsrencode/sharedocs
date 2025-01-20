@@ -2,11 +2,29 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
 import { cn } from "@/lib/utils";
+import { Metadata } from "next";
 const fontSans = FontSans({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
+export const metadata: Metadata = {
+  title: "ShareDocs",
+  description: "A simple and modern document sharing platform.",
+  openGraph: {
+    type: "website",
+    url: "https://sharedocs.app",
+    title: "ShareDocs",
+    description: "A simple and modern document sharing platform.",
+    images: [
+      {
+        url: "https://sharedocs.app/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+};
 export default function RootLayout({
   children,
 }: Readonly<{
