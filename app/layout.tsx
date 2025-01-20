@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import Provider from "./provider/Provider";
 const fontSans = FontSans({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,17 +37,20 @@ export default function RootLayout({
     <ClerkProvider
       appearance={{
         baseTheme: dark,
-        variables: { colorPrimary: "#3371FF", fontSize: "16px" },
+        variables: {
+          colorPrimary: "#3371FF",
+          fontSize: "16px",
+        },
       }}
     >
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "min-h-screen font-sans antialiased",
             fontSans.variable
           )}
         >
-          {children}
+          <Provider>{children}</Provider>
         </body>
       </html>
     </ClerkProvider>
