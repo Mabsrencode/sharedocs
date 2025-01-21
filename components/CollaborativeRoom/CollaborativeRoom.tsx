@@ -8,6 +8,7 @@ import { Editor } from "../editor/Editor";
 import ActiveCollaborators from "../ActiveCollaborators/ActiveCollaborators";
 import { Input } from "../ui/input";
 import Image from "next/image";
+import { updateDocument } from "@/lib/actions/room.actions";
 
 const CollaborativeRoom = ({
   roomId,
@@ -20,10 +21,18 @@ const CollaborativeRoom = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const updateTitleHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "enter") {
+  const updateTitleHandler = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter") {
       setLoading(true);
       try {
+        if (documentTitle !== roomMetadata.title) {
+          const updatedDocument = await updateDocument(roomId, documentTitle);
+          if (updatedDocument) {
+            setEditing(false);
+          }
+        }
       } catch (error) {
         console.log(error);
       }
@@ -38,6 +47,7 @@ const CollaborativeRoom = ({
         !containerRef.current.contains(e.target as Node)
       ) {
         setEditing(false);
+        updateDocument(roomId, documentTitle);
       }
     };
 
@@ -45,7 +55,13 @@ const CollaborativeRoom = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [roomId, documentTitle]);
+
+  useEffect(() => {
+    if (editing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editing]);
 
   return (
     <RoomProvider id={roomId}>
@@ -58,22 +74,16 @@ const CollaborativeRoom = ({
                 className="flex w-fit items-center justify-center gap-2"
               >
                 {editing && !loading ? (
-                  <div className="grid">
-                    <label htmlFor="document-title" className="text-xs">
-                      Document Title
-                    </label>
-                    <input
-                      id="document-title"
-                      type="text"
-                      value={documentTitle}
-                      ref={inputRef}
-                      placeholder="Enter title"
-                      onChange={(e) => setDocumentTitle(e.target.value)}
-                      onKeyDown={updateTitleHandler}
-                      disabled={!editing}
-                      className="py-0 text-sm bg-transparent outline-none focus:border-b border-white mt-2 py-2"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    value={documentTitle}
+                    ref={inputRef}
+                    placeholder="Enter title"
+                    onChange={(e) => setDocumentTitle(e.target.value)}
+                    onKeyDown={updateTitleHandler}
+                    disabled={!editing}
+                    className="text-sm bg-transparent outline-none focus:border-b border-white  "
+                  />
                 ) : (
                   <div className="border-r-2 pr-2">
                     <p className="text-sm">{documentTitle}</p>

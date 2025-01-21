@@ -4,7 +4,11 @@ interface SpinnerProps {
 }
 const Loader: React.FC<SpinnerProps> = ({ bigger }) => {
   return (
-    <div className="w-full h-screen flex justify-center items-center">
+    <div
+      className={`${
+        bigger && "w-full h-screen flex justify-center items-center"
+      }`}
+    >
       <div
         className={`mix-blend-difference animate-spin rounded-full ${
           bigger ? "h-12 w-12" : "h-6 w-6"
