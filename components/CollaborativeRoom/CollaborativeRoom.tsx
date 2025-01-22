@@ -6,7 +6,6 @@ import Header from "../common/Header/Header";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { Editor } from "../editor/Editor";
 import ActiveCollaborators from "../ActiveCollaborators/ActiveCollaborators";
-import { Input } from "../ui/input";
 import Image from "next/image";
 import { updateDocument } from "@/lib/actions/room.actions";
 import ShareModal from "../ShareModal/ShareModal";
@@ -17,6 +16,7 @@ const CollaborativeRoom = ({
   users,
   currentUserType,
 }: CollaborativeRoomProps) => {
+  console.log(roomMetadata.createId);
   const [documentTitle, setDocumentTitle] = useState(roomMetadata.title);
   const [editing, setEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -110,7 +110,7 @@ const CollaborativeRoom = ({
               <ShareModal
                 roomId={roomId}
                 collaborators={users}
-                creatorId={roomMetadata.creatorId}
+                creatorId={roomMetadata.createId}
                 currentUserType={currentUserType}
               />
               <SignedOut>

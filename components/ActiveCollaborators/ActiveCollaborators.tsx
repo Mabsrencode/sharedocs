@@ -16,7 +16,6 @@ const ActiveCollaborators = () => {
             height={100}
             className={`inline-block size-8 rounded-full ring-2 ring-dark-100 border-2 border-${collaborator.color}`}
           />
-          <span>{collaborator.name}</span>
         </li>
       ))}
     </ul>

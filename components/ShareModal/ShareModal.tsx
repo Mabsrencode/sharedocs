@@ -13,6 +13,9 @@ import Image from "next/image";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import UserTypeSelector from "../UserTypeSelector/UserTypeSelector";
+import Loader from "../common/Loader/Loader";
+import Collaborator from "../Collaborator/Collaborator";
+import { updateDocumentAccess } from "@/lib/actions/room.actions";
 
 const ShareModal = ({
   roomId,
@@ -26,23 +29,26 @@ const ShareModal = ({
   const [email, setEmail] = useState("");
   const [userType, setUserType] = useState<UserType>("viewer");
 
-  const shareDocumentHandler = async () => {};
+  const shareDocumentHandler = async () => {
+    setLoading(true);
+
+    await updateDocumentAccess({
+      roomId,
+      email,
+      userType: userType as UserType,
+      updatedBy: user.info,
+    });
+
+    setLoading(false);
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <button
-          className="flex gap-2 gradient-blue px-4 py-1 rounded-sm"
-          disabled={currentUserType !== "editor"}
-        >
-          <Image
-            src={"/assets/icons/share.svg"}
-            alt="share"
-            width={20}
-            height={20}
-            className="min-w-4 md:size-5"
-          />
-          <p className="mr-1 text-sm hidden sm:block">Share</p>
-        </button>
+        {currentUserType === "editor" && (
+          <div className="flex gap-2 gradient-blue px-4 py-1 rounded-sm">
+            <p className="mr-1 text-sm hidden sm:block">Share</p>
+          </div>
+        )}
       </DialogTrigger>
       <DialogContent className="shad-dialog">
         <DialogHeader>
@@ -65,6 +71,28 @@ const ShareModal = ({
             />
             <UserTypeSelector userType={userType} setUserType={setUserType} />
           </div>
+          <button
+            type="submit"
+            onClick={shareDocumentHandler}
+            className="gradient-blue flex items-center h-full gap-1 px-5 rounded-md"
+            disabled={loading}
+          >
+            {loading ? <Loader bigger={false} /> : "Invite"}
+          </button>
+        </div>
+        <div className="my-2 space-y-2">
+          <ul className="flex flex-col">
+            {collaborators.map((collaborator) => (
+              <Collaborator
+                key={collaborator.id}
+                roomId={roomId}
+                creatorId={creatorId}
+                email={collaborator.email}
+                collaborator={collaborator}
+                user={user.info}
+              />
+            ))}
+          </ul>
         </div>
       </DialogContent>
     </Dialog>

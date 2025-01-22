@@ -1,5 +1,7 @@
 import AddDocumentButton from "@/components/AddDocumentButton/AddDocumentButton";
 import Header from "@/components/common/Header/Header";
+import { DeleteModal } from "@/components/DeleteModal/DeleteModal";
+import Notifications from "@/components/Notifications/Notifications";
 import { getDocuments } from "@/lib/actions/room.actions";
 import { dateConverter } from "@/lib/utils";
 import { SignedIn, UserButton } from "@clerk/nextjs";
@@ -18,7 +20,7 @@ const page = async () => {
     <main className="home-container">
       <Header className="sticky left-0 top-0">
         <div className="flex items-center gap-2 lg:gap-4">
-          Notification
+          <Notifications />
           <SignedIn>
             <UserButton />
           </SignedIn>
@@ -38,7 +40,7 @@ const page = async () => {
               <li key={id} className="document-list-item">
                 <Link
                   href={`/documents/${id}`}
-                  className="flex flex-1 items-center gap-4"
+                  className="relative flex flex-1 items-center gap-4"
                 >
                   <div className="hidden rounded-md bg-dark-500 p-2 sm:block">
                     <Image
@@ -54,13 +56,8 @@ const page = async () => {
                       Created about {dateConverter(createdAt)}
                     </p>
                   </div>
-                  <div className="">
-                    <Image
-                      src={"/assets/icons/delete.svg"}
-                      alt="delete"
-                      width={24}
-                      height={24}
-                    />
+                  <div className="absolute top-2 right-2">
+                    <DeleteModal roomId={id} />
                   </div>
                 </Link>
               </li>

@@ -21,6 +21,7 @@ import FloatingToolbar from "./plugins/FloatingToolbarPlugin";
 import { useSyncStatus } from "@liveblocks/react";
 import { useThreads } from "@liveblocks/react/suspense";
 import Comments from "../Comments/Comments";
+import { DeleteModal } from "../DeleteModal/DeleteModal";
 
 function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
@@ -57,6 +58,7 @@ export function Editor({
       <div className="editor-container size-full">
         <div className="toolbar-wrapper flex min-w-full justify-between">
           <ToolbarPlugin />
+          {currentUserType === "editor" && <DeleteModal roomId={roomId} />}
         </div>
         <div className="editor-wrapper flex flex-col items-center justify-start">
           {isEditorLoading ? (
